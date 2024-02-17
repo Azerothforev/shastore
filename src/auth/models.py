@@ -27,4 +27,6 @@ class User(SQLAlchemyBaseUserTable[int], Base):
     is_verified: Mapped[bool] = mapped_column(
         Boolean, default=False, nullable=False
     )
-    products: Mapped[list["Product"]] = relationship("Product", back_populates="seller")
+    products: Mapped[list["Product"]] = relationship(
+        "Product", back_populates="seller"
+    )

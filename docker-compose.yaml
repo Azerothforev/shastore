@@ -1,5 +1,9 @@
 version: "3.8"
 
+volumes:
+  pg_data:
+  rabbitmq_data:
+
 services:
   db:
     container_name: "db"
@@ -11,6 +15,8 @@ services:
       - POSTGRES_USER
       - POSTGRES_PASSWORD
       - POSTGRES_DB
+    volumes:
+      - pg_data:/var/lib/postgresql/data
     ports:
       - "5432:5432"
     networks:
@@ -27,10 +33,24 @@ services:
       - RABBITMQ_DEFAULT_PASS
       - RABBITMQ_SERVER_ADDITIONAL_ERL_ARGS=-rabbit log_levels [{connection,error},{default,error}] disk_free_limit 2147483648
     volumes:
-      - ./rabbitmq:/var/lib/rabbitmq
+      - rabbitmq_data:/var/lib/rabbitmq
     ports:
       - 15672:15672
       - 5672:5672
+    networks:
+      - custom
+    
+  src-backend:
+    build: .
+    env_file:
+      - .env
+    container_name: shastore-backend
+    command: ["/backend/docker/migrations.sh"]
+    ports:
+      - "8000:8000"
+    depends_on:
+      - db
+      - rabbitmq
     networks:
       - custom
 

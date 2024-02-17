@@ -6,17 +6,18 @@ sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
 from aio_pika import IncomingMessage
 import aio_pika
-from config import RABBITMQ_DEFAULT_USER, RABBITMQ_DEFAULT_PASS
+from config import (
+    RABBITMQ_USER, RABBITMQ_PASS, RABBITMQ_HOST)
 from mail.service import EmailSender
 
 
 async def listen_to_queue(
 ):
     connection = await aio_pika.connect_robust(
-        host='localhost',
+        host=RABBITMQ_HOST,
         port=5672,
-        login=RABBITMQ_DEFAULT_USER,
-        password=RABBITMQ_DEFAULT_PASS
+        login=RABBITMQ_USER,
+        password=RABBITMQ_PASS
     )
     channel = await connection.channel()
 
