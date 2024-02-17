@@ -20,10 +20,12 @@
 	python -m venv venv
 	source venv/Scripts/activate *для windows
 
-3. сделайте миграции в директории src используя команду:
+4. cоздайте внутри папки src/migrations директорию versions, где будут создаваться миграции alembic.
+
+5. сделайте миграции в директории src используя команду:
 	alembic revision --autogenerate -m "ваш комментарий"
 
-4. поднимите все контейнеры в сети через docker-compose.yaml:
+6. поднимите все контейнеры в сети через docker-compose.yaml:
 	docker-compose up --build
 	docker-compose up -d --build *запустите в режиме демона, если не хотите видеть логов и освободить терминал
 
