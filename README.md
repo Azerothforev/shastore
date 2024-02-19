@@ -28,37 +28,44 @@ consumer'ом выступает сервис mail.
 
 ##### Локальный запуск приложения.
 ```angular2html
-перед запуском приложения, пожалуйстa:
 
+создайте файл .env и опишите внутри него переменные для rabbitmq, postgresql, jwt-token, а также логин/пароль приложения для отправки писем по gmail:
+		POSTGRES_HOST=хост для подключения к постгре(по дефолту localhost). Вимание! Для корректной работы в докере вы должны прописать сюда название вашего db из докера
+		POSTGRES_PORT=порт для подключения к постргре
+		POSTGRES_DB=название базы данных для подключения к постргре
+		POSTGRES_USER=пользователь постргре
+		POSTGRES_PASSWORD=пароль для подключения к постргре
+		SENDER_EMAIL=емейл с которого будут отправляться сообщения
+		SENDER_PASSWORD=пароль с которого будут отправляться сообщения(нужен именно пароль приложения, посмотрите, пожалуйста как его получить прочитав пару статей)
+		SECRET=создание токена для сервиса auth
+		RABBITMQ_USER=пользователь rabbitmq
+		RABBITMQ_PASS=пароль для входа в rabbitmq
+		RABBITMQ_HOST=хост для подключения к rabbitmq(по дефолту localhost). Внимание! Для корректной работы в докере вы должны прописать сюда название вашего rabbitmq из докера 
+```
 	1. установите зависимости в головной директории используя команду
 		pip install -r requirements.txt
 
-	2. создайте файл .env и опишите внутри него переменные для rabbitmq, postgresql, jwt-token, а также логин/пароль приложения для отправки писем по gmail:
-		POSTGRES_HOST=
-		POSTGRES_PORT=
-		POSTGRES_DB=
-		POSTGRES_USER=
-		POSTGRES_PASSWORD=
-		SENDER_EMAIL=
-		SENDER_PASSWORD=
-		SECRET=
-		RABBITMQ_USER=
-		RABBITMQ_PASS=
-		RABBITMQ_HOST=
-		
-	3. создайте и запустите переменную окружения:
-		python -m venv venv
-		source venv/Scripts/activate *для windows
+**_установите зависимости в головной директории используя команду_**
+```
+pip install -r requirements.txt
+```
 
-	4. cоздайте внутри папки src/migrations директорию versions, где будут создаваться миграции alembic.
+**_сделайте миграции_**
+```
+cоздайте внутри папки src/migrations директорию versions, где будут создаваться миграции alembic
+а затем выполните миграции в директории src используя команду
+	alembic revision --autogenerate -m "ваш комментарий"
+```
 
-	5. сделайте миграции в директории src используя команду:
-		alembic revision --autogenerate -m "ваш комментарий"
 
-	6. поднимите все контейнеры в сети через docker-compose.yaml:
-		docker-compose up --build
-		docker-compose up -d --build *запустите в режиме демона, если не хотите видеть логов и освободить терминал
-
+**_Запуск проекта в докере_**
+```
+поднимите все контейнеры в сети через docker-compose.yaml:
+	docker-compose up --build
+	docker-compose up -d --build *запустите в режиме демона, если не хотите видеть логов и освободить терминал
 
 Помните, что вы разворачиваете на локалке и для реального прода вам нужно переписать docker-compose или же создать новый
-'''
+```
+
+
+###### Dmitry Shalenko
