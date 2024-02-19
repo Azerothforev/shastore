@@ -70,9 +70,9 @@ async def buy_product(
             seller_id=product.seller_id,
             buyer_id=user.id)
     )
-    await rabbitmq_session[1].default_exchange.publish(
+    await rabbitmq_session[3].publish(
         aio_pika.Message(body=(user.email + ' buy').encode()),
-        routing_key=rabbitmq_session[2].name,
+        routing_key="add product/success register"
     )
     await session.execute(stmt)
     await session.commit()

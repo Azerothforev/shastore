@@ -24,9 +24,9 @@ class UserManager(IntegerIDMixin, BaseUserManager[User, int]):
         request: Optional[Request] = None
     ):
         rabbit_arr = await RabbitMQConnection.get_connection()
-        await rabbit_arr[1].default_exchange.publish(
+        await rabbit_arr[3].publish(
             aio_pika.Message(body=(user.email + ' register').encode()),
-            routing_key=rabbit_arr[2].name,
+            routing_key="add product/success register"
         )
         print(f"User {user.id} has registered.")
 

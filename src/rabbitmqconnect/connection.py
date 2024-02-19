@@ -22,5 +22,7 @@ class RabbitMQConnection:
             password=RABBITMQ_PASS
         )
         cls._channel = await cls._connection.channel()
+        cls._exchange = await cls._channel.declare_exchange("topic_exchange", type=aio_pika.ExchangeType.TOPIC)
         cls._queue = await cls._channel.declare_queue('email_queue', durable=True)
-        return [cls._connection, cls._channel, cls._queue]
+        await cls._queue.bind(cls._exchange, "add product/success register")
+        return [cls._connection, cls._channel, cls._queue, cls._exchange]
